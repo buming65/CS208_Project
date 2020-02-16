@@ -9,7 +9,8 @@ ip_client = gethostname()  # get ip of this node
 
 def send_data(data):
     s = socket(AF_INET, SOCK_STREAM)
-    host = gethostname() #set to the server host, now just use this computer as both the server and client
+    # host = gethostname() #set to the server host, now just use this computer as both the server and client
+    host = '192.168.1.2' #set host here
     port = 12345 #set port
     s.connect((host, port))
     data_byte = data.encode() #encode the data
