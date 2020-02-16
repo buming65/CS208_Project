@@ -46,6 +46,7 @@ if __name__ == '__main__':
     times = times.tolist() #send the last condition
     times.append(0)
     print(times)
+    #
 
     for i in times:
         condition, time_now = generate_random()
