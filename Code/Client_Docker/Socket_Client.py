@@ -52,5 +52,5 @@ if __name__ == '__main__':
 
     for i in times:
         condition, time_now = generate_random()
-        send_data(str(condition) + ',' + time_now)
+        send_data(str(condition) + ',' + time_now + ',' + ip_client)
         time.sleep(i)

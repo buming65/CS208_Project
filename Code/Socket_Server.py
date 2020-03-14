@@ -17,12 +17,25 @@ def connect_mongodb():
     # db = conn[db_name]
     return conn
 
+def search(db):
+    all_tables = db.list_collection_names()
+    # conditions = []
+    count = 0
+    for table in all_tables:
+        temp = db[table].find().sort('_id', pymongo.DESCENDING).limit(1)
+        state = [result['State'] for result in temp]
+        print('For the node: ' + table + 'The current condition is ' + state[0])
+        # conditions.append(state)
+        if state[0] == 'Unparked':
+            count += 1
+    print('For the current time, the lot has ' + str(count) + ' available space')
 
-def save_data(condition, time_parking):
+
+def save_data(condition, time_parking, ip_client):
     db_name = 'Parking'
     conn = connect_mongodb()
     db = conn[db_name]
-    collection_name = 'Parking'
+    collection_name = str(ip_client)
     collection = db[collection_name]
     condition = 'Parked' if condition == '1' else 'Unparked'
     time_changed = time_parking
@@ -37,6 +50,7 @@ def save_data(condition, time_parking):
         print(e)
     else:
         print('Insert successful')
+        search(db)
         conn.close()
 
 def get_data():
@@ -55,10 +69,13 @@ def get_data():
         data_byte = data.decode().split(',')
         condition = data_byte[0]
         time_parking = data_byte[1]
-        print(condition, time_parking)
-        save_data(condition, time_parking)
+        ip_client = data_byte[2]
+        print(condition, time_parking, ip_client)
+        save_data(condition, time_parking, ip_client)
 
     conn.close()
+
+
 
 
 if __name__ == '__main__':
